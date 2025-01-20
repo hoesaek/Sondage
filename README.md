@@ -31,7 +31,11 @@ Ce projet est une application de gestion de sondages développée en C# avec une
      - `GetSondageEnCoursDetails()` : Récupère les détails du sondage actif.
      - `GetAnciensSondages()` : Récupère les anciens sondages.
      - `CreerNouveauSondage()` : Insère un nouveau sondage et ses réponses dans la base.
-
+   1.2 ***Methode auxiliaire**
+        - ExecuteScalarQuery() : Exécute une requête qui retourne une valeur scalaire, comme un COUNT, MAX, etc. (par exemple, pour vérifier si un sondage est en cours).
+        - ExecuteNonQuery() : Exécute une requête qui ne retourne pas de données (comme INSERT, UPDATE, DELETE).
+        - ExecuteQuery() : Exécute une requête SQL qui retourne plusieurs lignes de résultats, par exemple une liste de sondages dans un DataTable.
+          
 2. **BDD**
    - Singleton gérant la connexion MySQL.
    - Fournit une méthode `GetConnection()` pour obtenir une instance de la connexion, appele : `BDD.Instance.GetConnectiion();` où Instance verifie si une instance de connexion est en cours ou non afin d'avoir qu'une seule instance connecter à ma bdd
@@ -141,3 +145,26 @@ Projet open-source ^^
                                 │   Interaction avec la base de données  │
                                 │     (MySQL, SQL, etc.)                 │
                                 └────────────────────────────────────────┘
+------------------------------------------------------------------------------------------------------
+
+Application
+│
+├── Menu Principal (MenuStrip)
+│   ├── Nouveau Sondage (Bouton)
+│   ├── Consulter Sondages Anciens (Bouton)
+│   └── Sondage en Cours (Label/Message)
+│
+├── Formulaire Nouveau Sondage
+│   ├── Question
+│   ├── Date Début
+│   ├── Date Fin
+│   ├── Réponses
+│   └── Bouton Soumettre
+│
+├── Liste des Anciens Sondages (DataGridView/ListView)
+│   └── Affichage des anciens sondages (et leurs réponses qui sera afficher a la place du sondagge en cours)
+│
+└── Sondage en Cours (Section de visualisation)
+    ├── Question du Sondage
+    ├── Réponses en Cours
+    └── Statistiques du Sondage
