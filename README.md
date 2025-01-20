@@ -35,7 +35,7 @@ Ce projet est une application de gestion de sondages développée en C# avec une
 2. **BDD**
    - Singleton gérant la connexion MySQL.
    - Fournit une méthode `GetConnection()` pour obtenir une instance de la connexion, appele : `BDD.Instance.GetConnectiion();` où Instance verifie si une instance de connexion est en cours ou non afin d'avoir qu'une seule instance connecter à ma bdd
-     -  (methode singleton qui peut remplacer des framework comme `entityframework`).
+     - La méthode Singleton, qui peut être utilisée pour gérer l'instance unique d'une ressource, n'est pas destinée à remplacer des frameworks comme `EntityFramework`, qui gèrent l'accès aux bases de données..
 
 3. **FormulairePrincipal**
    - Interface utilisateur principale.
