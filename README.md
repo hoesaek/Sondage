@@ -94,20 +94,6 @@ Ce projet est une application de gestion de sondages développée en C# avec une
 3. **Lancer l'application**
    - Compiler et exécuter le projet à partir de Visual Studio ou d'une autre IDE compatible.
 
-## Technologies Utilisées
-
-- **Langage :** C#
-- **Base de données :** MySQL
-- **IDE :** Visual Studio
-- **Bibliothèques :** MySql.Data pour les connexions à la base de données
-
-## Contributeurs
-
-- **Développeur principal :** hoesaek
-- **Contributeurs :** hoesaek
-
-Projet open-source ^^
-
 # Schema de mon projet afin de rendre modulaire les vues ainsi que l'utilisation des donnees
 
                                        ┌──────────────────────────────────┐
@@ -150,47 +136,47 @@ Projet open-source ^^
 
 # Application
 
-- **Menu Principal** (MenuStrip)
-  - **Nouveau Sondage** (Bouton)
-  - **Consulter Sondages Anciens** (Bouton)
-  - **Sondage en Cours** (Label/Message)
+                      ┌─────────────────────────────────────────────────────────────────────────┐
+                      │                            Application                                  │
+                      └─────────────────────────────────────────────────────────────────────────┘
+                                                       │
+        ┌──────────────────────────────────────────────┼────────────────────────────────────────────┐
+        │                                              │                                            │
+┌─────────────────────────────────────────┐  ┌───────────────────────────────────────────────┐   ┌───────────────────────────────────────────┐
+│            Menu Principal               │  │      Formulaire Nouveau Sondage               │   │ Liste des Anciens Sondages (DataGridView) │
+│        (MenuStrip)                      │  │                                               │   │                                           │
+├─────────────────────────────────────────┤  ├───────────────────────────────────────────────┤   ├───────────────────────────────────────────┤
+│ - Nouveau Sondage (Bouton)              │  │ - Question                                    │   │ - Affichage des anciens sondages          │
+│ - Consulter Sondages Anciens (Bouton)   │  │ - Date Début                                  │   │   (et leurs réponses qui seront affichées │
+│ - Sondage en Cours (Label/Message)      │  │ - Date Fin                                    │   │    à la place du sondage en cours)        │
+└─────────────────────────────────────────┘  │ - Réponses                                    │   └───────────────────────────────────────────┘
+                                             │ - Bouton Soumettre                            |
+                                             └───────────────────────────────────────────────┘
+                                                                    │
+                                                  ┌────────────────────────────────────┐
+                                                  │  Sondage en Cours (Visualisation)  │
+                                                  ├────────────────────────────────────┤
+                                                  │ - Question du Sondage              │
+                                                  │ - Réponses en Cours                │
+                                                  │ - Statistiques du Sondage          │
+                                                  └────────────────────────────────────┘
 
-- **Formulaire Nouveau Sondage**
-  - **Question**
-  - **Date Début**
-  - **Date Fin**
-  - **Réponses**
-  - **Bouton Soumettre**
 
-- **Liste des Anciens Sondages** (DataGridView/ListView)
-  - Affichage des anciens sondages (et leurs réponses qui seront affichées à la place du sondage en cours)
+## Technologies Utilisées
 
-- **Sondage en Cours** (Section de visualisation)
-  - **Question du Sondage**
-  - **Réponses en Cours**
-  - **Statistiques du Sondage**
+- **Langage :** C#
+- **Base de données :** MySQL
+- **IDE :** Visual Studio
+- **Bibliothèques :** MySql.Data pour les connexions à la base de données
 
-Application
-│
-├── Menu Principal (MenuStrip)
-│   ├── Nouveau Sondage (Bouton)
-│   ├── Consulter Sondages Anciens (Bouton)
-│   └── Sondage en Cours (Label/Message)
-│
-├── Formulaire Nouveau Sondage
-│   ├── Question
-│   ├── Date Début
-│   ├── Date Fin
-│   ├── Réponses
-│   └── Bouton Soumettre
-│
-├── Liste des Anciens Sondages (DataGridView/ListView)
-│   └── Affichage des anciens sondages (et leurs réponses qui seront affichées à la place du sondage en cours)
-│
-└── Sondage en Cours (Section de visualisation)
-    ├── Question du Sondage
-    ├── Réponses en Cours
-    └── Statistiques du Sondage
+## Contributeurs
+
+- **Développeur principal :** hoesaek
+- **Contributeurs :** hoesaek
+
+# Projet open-source ^^
+
+
 
 
 
