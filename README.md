@@ -148,6 +148,28 @@ Projet open-source ^^
                                 └────────────────────────────────────────┘
 ------------------------------------------------------------------------------------------------------
 
+# Application
+
+- **Menu Principal** (MenuStrip)
+  - **Nouveau Sondage** (Bouton)
+  - **Consulter Sondages Anciens** (Bouton)
+  - **Sondage en Cours** (Label/Message)
+
+- **Formulaire Nouveau Sondage**
+  - **Question**
+  - **Date Début**
+  - **Date Fin**
+  - **Réponses**
+  - **Bouton Soumettre**
+
+- **Liste des Anciens Sondages** (DataGridView/ListView)
+  - Affichage des anciens sondages (et leurs réponses qui seront affichées à la place du sondage en cours)
+
+- **Sondage en Cours** (Section de visualisation)
+  - **Question du Sondage**
+  - **Réponses en Cours**
+  - **Statistiques du Sondage**
+
 Application
 │
 ├── Menu Principal (MenuStrip)
@@ -163,9 +185,12 @@ Application
 │   └── Bouton Soumettre
 │
 ├── Liste des Anciens Sondages (DataGridView/ListView)
-│   └── Affichage des anciens sondages (et leurs réponses qui sera afficher a la place du sondagge en cours)
+│   └── Affichage des anciens sondages (et leurs réponses qui seront affichées à la place du sondage en cours)
 │
 └── Sondage en Cours (Section de visualisation)
     ├── Question du Sondage
     ├── Réponses en Cours
     └── Statistiques du Sondage
+
+
+
