@@ -94,6 +94,9 @@ Ce projet est une application de gestion de sondages développée en C# avec une
 3. **Lancer l'application**
    - Compiler et exécuter le projet à partir de Visual Studio ou d'une autre IDE compatible.
 
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+
 # Schema de mon projet afin de rendre modulaire les vues ainsi que l'utilisation des donnees
 
                                        ┌──────────────────────────────────┐
@@ -132,33 +135,6 @@ Ce projet est une application de gestion de sondages développée en C# avec une
                                 │   Interaction avec la base de données  │
                                 │     (MySQL, SQL, etc.)                 │
                                 └────────────────────────────────────────┘
------------------------------------------------------------------------------------------------------------------------------------------------------------
-
-                                     ┌─────────────────────────────────────────────────────────────────────────┐
-                                     │                            Application                                  │
-                                     └─────────────────────────────────────────────────────────────────────────┘
-                                                                         │
-        ┌──────────────────────────────────────────────────────────────────────────────────────────────────────────────┐
-        │                                                                │                                             │                             
-   ┌─────────────────────────────────────────┐  ┌───────────────────────────────────────────────┐   ┌───────────────────────────────────────────────┐
-   │            Menu Principal               │  │    Formulaire Nouveau Sondage (visualisation) │   │    Liste des Anciens Sondages (DataGridView)  │
-   │        (MenuStrip)                      │  │                                               │   │                                               │
-   ├─────────────────────────────────────────┤  ├───────────────────────────────────────────────┤   ├───────────────────────────────────────────────┤
-   │ - Nouveau Sondage (Bouton)              │  │ - Question                                    │   │ - Affichage des anciens sondages              │
-   │ - Consulter Sondages Anciens (Bouton)   │  │ - Date Début                                  │   │   (et leurs réponses qui seront affichées     │
-   │ - Sondage en Cours (Label/Message)      │  │ - Date Fin                                    │   │    à la place du sondage en cours)            │
-   └─────────────────────────────────────────┘  │ - Réponses                                    │   └───────────────────────────────────────────────┘
-                                                │ - Bouton Soumettre                            |
-                                                └───────────────────────────────────────────────┘
-                                                                         │
-                                                      ┌────────────────────────────────────┐
-                                                      │  Sondage en Cours (Visualisation)  │
-                                                      ├────────────────────────────────────┤
-                                                      │ - Question du Sondage              │
-                                                      │ - Réponses en Cours                │
-                                                      │ - Statistiques du Sondage          │
-                                                      └────────────────────────────────────┘
-
 --------------------------------------------------------------------------------------------------------------------------------------------------------
 
 ## Technologies Utilisées
