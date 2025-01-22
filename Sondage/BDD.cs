@@ -2,6 +2,8 @@
 using IniParser;
 using IniParser.Model;
 using System;
+using System.Data;
+using System.IO;
 
 namespace Sondage
 {
@@ -23,9 +25,10 @@ namespace Sondage
             {
                 // Créer un parseur
                 var parser = new FileIniDataParser();
+                string configPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "config.ini");
 
                 // Charger le fichier INI
-                IniData data = parser.ReadFile("config.ini");
+                IniData data = parser.ReadFile(configPath);
 
                 // Lire les données de configuration
                 string dbHost = data["Database"]["Host"];
@@ -35,13 +38,10 @@ namespace Sondage
 
                 // Construire la chaîne de connexion
                 _connectionString = $"Server={dbHost};Database={dbName};User Id={dbUsername};Password={dbPassword};";
-
-                // Initialiser la connexion MySQL
-                _connection = new MySqlConnection(_connectionString);
             }
             catch (Exception ex)
             {
-                string error = "Erreur lors de l'initialisation de la base de données : " + ex.Message;
+                string error = "Erreur lors de l'initialisation de la base de données : \n" + ex.Message;
                 throw new Exception(error, ex);
             }
         }
@@ -63,8 +63,20 @@ namespace Sondage
         // Méthode pour obtenir la connexion MySQL
         public MySqlConnection GetConnection()
         {
-            if (_connection == null || _connection.State == System.Data.ConnectionState.Closed)
+            // Vérifier si la connexion est null ou fermée
+            if (_connection == null || _connection.State == ConnectionState.Closed || _connection.State == ConnectionState.Broken)
             {
+                if (_connection != null)
+                {
+                    // Fermer et disposer de l'ancienne connexion si elle était ouverte
+                    _connection.Close();
+                    _connection.Dispose();
+                }
+
+                // Créer une nouvelle connexion
+                _connection = new MySqlConnection(_connectionString);
+
+                // Ouvrir la connexion
                 _connection.Open();
             }
             return _connection;
@@ -73,9 +85,10 @@ namespace Sondage
         // Méthode pour fermer la connexion MySQL
         public void CloseConnection()
         {
-            if (_connection != null && _connection.State == System.Data.ConnectionState.Open)
+            if (_connection != null && _connection.State == ConnectionState.Open)
             {
                 _connection.Close();
+                _connection.Dispose();
             }
         }
     }

@@ -53,18 +53,21 @@
             nouveauSondageToolStripMenuItem.Name = "nouveauSondageToolStripMenuItem";
             nouveauSondageToolStripMenuItem.Size = new Size(145, 24);
             nouveauSondageToolStripMenuItem.Text = "Nouveau Sondage";
+            nouveauSondageToolStripMenuItem.Click += nouveauSondageToolStripMenuItem_Click;
             // 
             // consulterUnAncienSondageToolStripMenuItem
             // 
             consulterUnAncienSondageToolStripMenuItem.Name = "consulterUnAncienSondageToolStripMenuItem";
             consulterUnAncienSondageToolStripMenuItem.Size = new Size(129, 24);
             consulterUnAncienSondageToolStripMenuItem.Text = "Ancien sondage";
+            consulterUnAncienSondageToolStripMenuItem.Click += consulterUnAncienSondageToolStripMenuItem_Click;
             // 
             // ajouterUnNouveauSondageToolStripMenuItem
             // 
             ajouterUnNouveauSondageToolStripMenuItem.Name = "ajouterUnNouveauSondageToolStripMenuItem";
             ajouterUnNouveauSondageToolStripMenuItem.Size = new Size(143, 24);
             ajouterUnNouveauSondageToolStripMenuItem.Text = "Sondage en Cours";
+            ajouterUnNouveauSondageToolStripMenuItem.Click += ajouterUnNouveauSondageToolStripMenuItem_Click;
             // 
             // progressBarTempsRestant
             // 
@@ -81,6 +84,7 @@
             button1.TabIndex = 4;
             button1.Text = "button1";
             button1.UseVisualStyleBackColor = true;
+            button1.Click += button1_Click;
             // 
             // Form1
             // 
@@ -99,6 +103,7 @@
             StartPosition = FormStartPosition.CenterScreen;
             Text = "Sondage";
             Load += Form1_Load;
+            Leave += Form1_Leave;
             menuStrip1.ResumeLayout(false);
             menuStrip1.PerformLayout();
             ResumeLayout(false);

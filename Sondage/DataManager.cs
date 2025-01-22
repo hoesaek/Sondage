@@ -6,8 +6,11 @@ namespace Sondage
 {
     internal class DataManager
     {
-        
-        // Fonction pour vérifier s'il existe un sondage en cours avec la connexion singleton
+
+        /// <summary>
+        /// Vérifie s'il existe un sondage actuellement en cours dans la base de données.
+        /// </summary>
+        /// <returns>True si un sondage est en cours, sinon False.</returns>
         public bool IsSondageEnCours()
         {
             bool enCours = false;
@@ -15,56 +18,71 @@ namespace Sondage
 
             try
             {
-                // Utilisation de la connexion de la classe BDD via le Singleton
                 using (MySqlConnection conn = BDD.Instance.GetConnection())
                 {
-                    // Création de la commande MySQL avec la requête et la connexion
                     using (MySqlCommand cmd = new MySqlCommand(query, conn))
                     {
-                        // Exécution de la requête et récupération du résultat
                         int count = Convert.ToInt32(cmd.ExecuteScalar());
-                        enCours = count > 0; // Si un sondage est en cours, count > 0
+                        enCours = count > 0;
                     }
                 }
             }
             catch (Exception ex)
             {
-                // Gestion des erreurs de connexion ou d'exécution
-                MessageBox.Show($"Erreur lors de la vérification du sondage en cours: {ex.Message}", "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show($"Erreur lors de la vérification du sondage en cours \n {ex.Message} \n", "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
 
             return enCours;
         }
-        // Récupère les détails du sondage en cours
+
+        /// <summary>
+        /// Récupère les détails du sondage en cours, comme la question.
+        /// </summary>
+        /// <returns>La question du sondage en cours ou une chaîne vide en cas d'erreur.</returns>
         public static string GetSondageEnCoursDetails()
         {
             string query = "SELECT question FROM Sondage WHERE NOW() BETWEEN dateDebut AND dateFin LIMIT 1";
             try
             {
-                return ExecuteScalarQuery(query).ToString();
+                return ExecuteScalarQuery(query)?.ToString() ?? string.Empty;
             }
             catch (Exception ex)
             {
-                // Log ou message d'erreur
                 Console.WriteLine($"Erreur: {ex.Message}");
                 return string.Empty;
             }
         }
-        // Fonction auxiliaire pour exécuter une requête SQL qui retourne une valeur scalaire (comme COUNT, MAX, etc.)
-        private static object ExecuteScalarQuery(string query, params MySqlParameter[] parameters)
+
+        /// <summary>
+        /// Récupère la liste des anciens sondages.
+        /// </summary>
+        /// <returns>Un DataTable contenant les anciens sondages (id, question, dateDebut, dateFin).</returns>
+        public static DataTable GetAnciensSondages()
         {
-            using (MySqlConnection conn = BDD.Instance.GetConnection())
+            string query = "SELECT id, question, dateDebut, dateFin FROM Sondage WHERE dateFin < NOW() ORDER BY dateFin DESC";
+            try
             {
-                MySqlCommand cmd = new MySqlCommand(query, conn);
-                cmd.Parameters.AddRange(parameters);
-                conn.Open();
-                return cmd.ExecuteScalar();
+                return ExecuteQuery(query);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Erreur: {ex.Message}");
+                return new DataTable();
             }
         }
-        // Créer un nouveau sondage
+
+        // public static DataTable GetAnciensReponse(int idSondage) { }
+
+        /// <summary>
+        /// Crée un nouveau sondage dans la base de données, y compris les réponses associées.
+        /// </summary>
+        /// <param name="question">La question du sondage.</param>
+        /// <param name="dateDebut">La date de début du sondage.</param>
+        /// <param name="dateFin">La date de fin du sondage.</param>
+        /// <param name="reponses">Un tableau de chaînes contenant les réponses possibles.</param>
+        /// <returns>True si le sondage a été créé avec succès, sinon False.</returns>
         public static bool CreerNouveauSondage(string question, DateTime dateDebut, DateTime dateFin, string[] reponses)
         {
-            // Début de la transaction pour garantir l'intégrité des données
             using (var conn = BDD.Instance.GetConnection())
             {
                 conn.Open();
@@ -81,63 +99,65 @@ namespace Sondage
                         new MySqlParameter("@dateFin", dateFin)
                     ];
 
-                    // Exécution de la requête d'insertion du sondage
                     MySqlCommand cmdSondage = new MySqlCommand(querySondage, conn, transaction);
                     cmdSondage.Parameters.AddRange(parametersSondage);
                     cmdSondage.ExecuteNonQuery();
 
-                    // Récupération de l'id du sondage inséré
                     long sondageId = cmdSondage.LastInsertedId;
 
                     // 2. Insertion des réponses
                     if (reponses != null && reponses.Length > 0)
                     {
                         string queryReponse = "INSERT INTO Reponse (idSondage, reponse) VALUES (@idSondage, @reponse)";
-
                         foreach (string reponse in reponses)
                         {
                             MySqlParameter[] parametersReponse =
-                            [
-                                new MySqlParameter("@idSondage", sondageId),
-                                new MySqlParameter("@reponse", reponse)
-                            ];
+                            {
+                        new MySqlParameter("@idSondage", sondageId),
+                        new MySqlParameter("@reponse", reponse)
+                    };
 
-                            // Exécution de la requête pour insérer chaque réponse
                             MySqlCommand cmdReponse = new MySqlCommand(queryReponse, conn, transaction);
                             cmdReponse.Parameters.AddRange(parametersReponse);
                             cmdReponse.ExecuteNonQuery();
                         }
                     }
 
-                    // Si tout a réussi, on valide la transaction
                     transaction.Commit();
                     return true;
                 }
                 catch (Exception ex)
                 {
-                    // En cas d'erreur, on annule la transaction
                     transaction.Rollback();
                     Console.WriteLine($"Erreur: {ex.Message}");
                     return false;
                 }
             }
         }
-        // Récupère les anciens sondages
-        public static DataTable GetAnciensSondages()
+
+        /// <summary>
+        /// Exécute une requête SQL qui retourne une valeur scalaire (comme COUNT, MAX, etc.).
+        /// </summary>
+        /// <param name="query">La requête SQL à exécuter.</param>
+        /// <param name="parameters">Les paramètres associés à la requête.</param>
+        /// <returns>Un objet contenant le résultat scalaire de la requête.</returns>
+        private static object ExecuteScalarQuery(string query, params MySqlParameter[] parameters)
         {
-            string query = "SELECT id, question, dateDebut, dateFin FROM Sondage WHERE dateFin < NOW() ORDER BY dateFin DESC";
-            try
+            using (MySqlConnection conn = BDD.Instance.GetConnection())
             {
-                return ExecuteQuery(query);
-            }
-            catch (Exception ex)
-            {
-                // Log ou message d'erreur
-                Console.WriteLine($"Erreur: {ex.Message}");
-                return new DataTable();
+                MySqlCommand cmd = new MySqlCommand(query, conn);
+                cmd.Parameters.AddRange(parameters);
+                conn.Open();
+                return cmd.ExecuteScalar();
             }
         }
-        // Fonction auxiliaire pour exécuter une requête SQL qui ne retourne pas de données (INSERT, UPDATE, DELETE)
+
+        /// <summary>
+        /// Exécute une requête SQL qui ne retourne pas de données (INSERT, UPDATE, DELETE).
+        /// </summary>
+        /// <param name="query">La requête SQL à exécuter.</param>
+        /// <param name="parameters">Les paramètres associés à la requête.</param>
+        /// <returns>Le nombre de lignes affectées par la requête.</returns>
         private static int ExecuteNonQuery(string query, params MySqlParameter[] parameters)
         {
             using (MySqlConnection conn = BDD.Instance.GetConnection())
@@ -149,7 +169,12 @@ namespace Sondage
             }
         }
 
-        // Fonction auxiliaire pour exécuter une requête SQL qui retourne un DataTable (SELECT)
+        /// <summary>
+        /// Exécute une requête SQL qui retourne un DataTable (SELECT).
+        /// </summary>
+        /// <param name="query">La requête SQL à exécuter.</param>
+        /// <param name="parameters">Les paramètres associés à la requête.</param>
+        /// <returns>Un DataTable contenant les résultats de la requête.</returns>
         private static DataTable ExecuteQuery(string query, params MySqlParameter[] parameters)
         {
             using (MySqlConnection conn = BDD.Instance.GetConnection())
@@ -162,5 +187,6 @@ namespace Sondage
                 return dataTable;
             }
         }
+
     }
 }
