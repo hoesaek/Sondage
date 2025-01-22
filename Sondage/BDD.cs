@@ -1,4 +1,6 @@
 ﻿using MySql.Data.MySqlClient;
+using IniParser;
+using IniParser.Model;
 using System;
 
 namespace Sondage
@@ -9,7 +11,7 @@ namespace Sondage
         private static BDD? _instance;
 
         // Chaîne de connexion à la base de données MySQL
-        private static string _connectionString = "Server=localhost;Database=sondage;User Id=c#;Password=8c!3h)|a>al6;";
+        private static string _connectionString;
 
         // Connexion MySQL
         private MySqlConnection? _connection;
@@ -17,8 +19,31 @@ namespace Sondage
         // Constructeur privé pour empêcher la création d'instances multiples
         private BDD()
         {
-            // Initialisation de la connexion
-            _connection = new MySqlConnection(_connectionString);
+            try
+            {
+                // Créer un parseur
+                var parser = new FileIniDataParser();
+
+                // Charger le fichier INI
+                IniData data = parser.ReadFile("config.ini");
+
+                // Lire les données de configuration
+                string dbHost = data["Database"]["Host"];
+                string dbName = data["Database"]["Name"];
+                string dbUsername = data["Database"]["Username"];
+                string dbPassword = data["Database"]["Password"];
+
+                // Construire la chaîne de connexion
+                _connectionString = $"Server={dbHost};Database={dbName};User Id={dbUsername};Password={dbPassword};";
+
+                // Initialiser la connexion MySQL
+                _connection = new MySqlConnection(_connectionString);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Erreur lors de l'initialisation de la base de données : " + ex.Message);
+                throw; // Relancer l'exception pour informer de l'erreur
+            }
         }
 
         // Propriété pour accéder à l'instance du Singleton
