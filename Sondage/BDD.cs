@@ -11,7 +11,7 @@ namespace Sondage
         private static BDD? _instance;
 
         // Chaîne de connexion à la base de données MySQL
-        private static string _connectionString;
+        private static string? _connectionString;
 
         // Connexion MySQL
         private MySqlConnection? _connection;
