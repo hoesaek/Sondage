@@ -41,8 +41,8 @@ namespace Sondage
             }
             catch (Exception ex)
             {
-                Console.WriteLine("Erreur lors de l'initialisation de la base de données : " + ex.Message);
-                throw; // Relancer l'exception pour informer de l'erreur
+                string error = "Erreur lors de l'initialisation de la base de données : " + ex.Message;
+                throw new Exception(error, ex);
             }
         }
 
